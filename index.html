@@ -23,7 +23,7 @@
   
     <link rel="stylesheet" href="//at.alicdn.com/t/font_2013763_gtq49u46q4m.css">
   
-  <link rel="stylesheet" href="/css/style.css?v=1597809712554">
+  <link rel="stylesheet" href="/css/style.css?v=1597817318221">
 <meta name="generator" content="Hexo 5.0.2"></head>
 
 <body class="mdui-drawer-body-left">
@@ -162,40 +162,6 @@
         <article>
             
                 <p>前言:我所写的文章大部分为自己理解之后的想法,若有任何不正确的地方请多多包含并在评论区给与指正,编程从来不应该是一个人的战斗!!!</p>
-<h2 id="1-我的目标-局域网聊天通讯软件-Winform"><a href="#1-我的目标-局域网聊天通讯软件-Winform" class="headerlink" title="1.我的目标:局域网聊天通讯软件[Winform]"></a>1.我的目标:局域网聊天通讯软件[Winform]</h2><p>基于这个目标和某位大佬的意见我基本可以分为两种TCP和HTTP</p>
-<p>我选择了TCP</p>
-<h2 id="2-方法-Socket"><a href="#2-方法-Socket" class="headerlink" title="2.方法:Socket"></a>2.方法:Socket</h2><p><img data-sizes="auto" data-src="https://img2020.cnblogs.com/blog/1595793/202007/1595793-20200714174446910-1679467831.png" alt="图1" class="lazyload"></p>
-<p>这个就是整体说明图</p>
-<p>服务器端:</p>
-<p>// 定义一个套接字用于监听客户端发来的消息，包含三个参数（ipv4寻址协议，流式连接，tcp协议）</p>
-<p>Socket socket_TCP = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);</p>
-<p>//绑定监听端口</p>
-<p>IPEndPoint iPEndPoint = new IPEndPoint(IPAddress.Parse(textBox_IP.Text), (int)numericUpDown_Port.Value);</p>
-<p>socket_TCP.Bind(iPEndPoint);</p>
-<p>//设置监听队列</p>
-<p>socket_TCP.Listen(0);</p>
-<p>//等待客户端连接</p>
-<p>socket_TCP.Accept();</p>
-<p>客户端:</p>
-<p>// 定义一个套接字用于监听客户端发来的消息，包含三个参数（ipv4寻址协议，流式连接，tcp协议）<br>Socket socket_TCP = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);<br>IPEndPoint iPEndPoint = new IPEndPoint(IPAddress.Parse(textBox_IP.Text), (int)numericUpDown_Port.Value);<br>Socket_TCP.Connect(iPEndPoint);</p>
-<p>然后就是打开两个软件了</p>
-<p>连接成功了 但是服务器端接收客户端连接会锁死 所以加一个线程单独来做连接</p>
-<p>Thread thread_Listen = new Thread(TCP_Listen);<br>thread_Listen.Start();</p>
-<p>连接可以是多次的所以服务器应循环等待连接操作保证每次都可以连接</p>
-<p>private void TCP_Listen()<br>{<br>　　while (true)<br>　　{<br>　　　　socket_TCP.Accept();<br>　　}<br>}</p>
-<p>连接完成接下来就是</p>
-<p>服务器发送数据给客户端 </p>
-<p>客户端接收发送来得数据</p>
-<p>客户端发送数据给服务器</p>
-<p>服务器接收发送来得数据</p>
-<p>就可以了</p>
-<p>两个都是Socket发送和接收都是公用的</p>
-<p>//发送:<br>private void button_Send_Click(object sender, EventArgs e)<br>{<br>    Socket_TCP.Send(Encoding.UTF8.GetBytes(textBox_Send.Text.Trim()));<br>    textBox_Send.Clear();<br>}<br>//接收:<br>private void TCP_Read()<br>{<br>    while (true)<br>    {<br>        byte[] buffer_Data = new byte[1024 * 1024];<br>        Socket_TCP.Receive(buffer_Data);<br>    }<br>}</p>
-<p>完成了,细节部分就不予多说了</p>
-<p>源码地址:</p>
-<p>链接：<a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1Z8x59WaR7GVP-STTM-aj3Q">https://pan.baidu.com/s/1Z8x59WaR7GVP-STTM-aj3Q</a><br>提取码：ea5l</p>
-<p>持续更新2020-07-1419:22:49</p>
-
             
         </article>
     </div>
@@ -219,33 +185,6 @@
         <article>
             
                 <p>在前一篇的基础上,我又增加了一点东西在里面,因为是局域网聊天交互软件 所以不可能只和服务器交互</p>
-<p>在这个时候我理解了一个词,叫长连接和短连接<br>长连接的意思就是说声明一个事件然后打开操作…然后关闭 这就为一个长连接,长连接只有最开始的时候打开结束的时候关闭,中间想发什么数据就发什么 想接收什么数据就接收,</p>
-<p>短连接的意思就是每次收或者发都要打开关闭 例如发送 的时候 需要打开发送关闭 打开 接收关闭 </p>
-<p>长连接和短连接都是分情况使用的</p>
-<p>tcp连接就是长连接 但是连接的时间太长没有数据可能系统就会认为这个连接已经断开或者默认帮你断开</p>
-<p>所以在长连接中还需要做到心跳机制,周期性发送心跳包,为什么叫心跳包</p>
-<p>我觉得可能是因为周期性的而且每个人的心跳也不一样,每个人定义心跳包的内容和周期也不一样</p>
-<p>所以就叫做心跳吧</p>
-<p>这个在时间空间里面就可以实现了</p>
-<p>下来我又用字典socket进行分类 </p>
-<p>让tcp可以同时接收多端口的数据并且可以选择端口发送数据</p>
-<p>在加上之前的心跳机制 </p>
-<p>每次心跳获取服务器端连接的所有客户端的ip端口</p>
-<p>想给谁发送数据 就在发送的数据里面加上ip和端口 </p>
-<p>在服务器端接收到数据的时候进行处理就完成了 两台客户端,或者多台客户端相互之间通讯的效果了</p>
-<p>服务器端最终程序</p>
-<p>using System;<br>using System.Collections.Generic;<br>using System.ComponentModel;<br>using System.Data;<br>using System.Drawing;<br>using System.Linq;<br>using System.Net;<br>using System.Net.Sockets;<br>using System.Text;<br>using System.Threading;<br>using System.Threading.Tasks;<br>using System.Windows.Forms;</p>
-<p>namespace Server<br>{<br>public partial class Server_Form : Form<br>{<br>// 负责监听客户端的套接字<br>Socket socket_TCP = null;<br>// 负责和客户端通信的套接字<br>Socket socket_Communication = null;<br>//监听线程<br>Thread thread_Listen = null;<br>//客户端 端口号集合<br>Dictionary&lt;string, Socket&gt; dic = new Dictionary&lt;string, Socket&gt;();<br>public Server_Form()<br>{<br>InitializeComponent();<br>Control.CheckForIllegalCrossThreadCalls = false;<br>}<br>private void button_Connection_Click(object sender, EventArgs e)<br>{<br>if (button_Connection.Text == “连接”)<br>{<br>button_Connection.Text = “断开”;<br>socket_TCP = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);<br>IPEndPoint iPEndPoint = new IPEndPoint(IPAddress.Parse(textBox_IP.Text), (int)numericUpDown_Port.Value);<br>socket_TCP.Bind(iPEndPoint);<br>socket_TCP.Listen(0);<br>thread_Listen = new Thread(TCP_Listen);<br>thread_Listen.IsBackground = true;<br>thread_Listen.Start();<br>}<br>else if (button_Connection.Text == “断开”)<br>{<br>button_Connection.Text = “连接”;<br>if (socket_Communication != null)<br>{<br>socket_Communication.Close();<br>}<br>}<br>}<br>private void TCP_Listen()<br>{<br>while (true)<br>{<br>try<br>{<br>socket_Communication = socket_TCP.Accept();<br>//客户端网络节点<br>string RemoteEndPoint = socket_Communication.RemoteEndPoint.ToString();<br>dic.Add(RemoteEndPoint, socket_Communication);<br>listBoxOnlineList.Items.Add(RemoteEndPoint);<br>//传参的线程<br>ParameterizedThreadStart pts = new ParameterizedThreadStart(TCP_Read);<br>Thread thread = new Thread(pts);<br>thread.IsBackground = true;<br>thread.Start(socket_Communication);<br>}<br>catch (Exception e)<br>{<br>break;<br>}<br>}<br>}<br>private void button_Send_Click(object sender, EventArgs e)<br>{<br>if (listBoxOnlineList.SelectedIndex == -1)<br>{<br>MessageBox.Show(“请选择要发送的客户端！”, “提示”, MessageBoxButtons.OK, MessageBoxIcon.Stop);<br>}<br>else<br>{<br>string selectClient = listBoxOnlineList.Text;<br>TCP_Write(textBox_Send.Text, selectClient);<br>textBox_Send.Text = “”;<br>}<br>}<br>private void TCP_Write(string data, string EndPoint)<br>{<br>try<br>{<br>dic[EndPoint].Send(Encoding.UTF8.GetBytes(data));<br>}<br>catch (Exception e)<br>{<br>MessageBox.Show(e.Message);<br>return;<br>}<br>}<br>private void TCP_Read(object socket_Read)<br>{<br>Socket socket = socket_Read as Socket;<br>while (true)<br>{<br>try<br>{<br>byte[] buffer_Data = new byte[1024 * 1024];<br>int Accept_length = socket.Receive(buffer_Data);<br>EndPoint endPoint = socket.RemoteEndPoint;<br>string Str_Data = Encoding.UTF8.GetString(buffer_Data, 0, buffer_Data.Length).Trim(“\0”.ToCharArray());<br>if (Str_Data.Substring(0,2) == “aa” &amp;&amp; Str_Data.Substring(Str_Data.Length - 2, 2) == “AA”)<br>{<br>switch (Str_Data.Substring(2,2))<br>{<br>case “00”:<br>string str = null;<br>foreach (var item in dic)<br>{<br>str += item.Key + “ “;<br>}<br>TCP_Write(str, endPoint.ToString());<br>break;<br>case “01”:<br>TCP_Write(Str_Data.Substring(19, Str_Data.Length - 21), Str_Data.Substring(4, 15));<br>break;<br>default:<br>break;<br>}<br>}<br>else<br>{<br>richTextBox_Receive.AppendText(“客户端 “ + endPoint + “:” + Str_Data + “\r\n”);<br>}<br>}<br>catch (Exception)<br>{<br>//提示套接字监听异常<br>richTextBox_Receive.AppendText(“客户端” + socket.RemoteEndPoint + “已经中断连接” + “\r\n”);<br>//移除断开的客户端<br>dic.Remove(socket.RemoteEndPoint.ToString());<br>//从listbox中移除断开连接的客户端<br>listBoxOnlineList.Items.Remove(socket.RemoteEndPoint.ToString());<br>//关闭之前accept出来的和客户端进行通信的套接字<br>socket_Communication.Close();<br>break;<br>}<br>}<br>}<br>}<br>}</p>
-<p>客户端最终程序</p>
-<p>using System;<br>using System.Collections.Generic;<br>using System.ComponentModel;<br>using System.Data;<br>using System.Drawing;<br>using System.Linq;<br>using System.Net;<br>using System.Net.Sockets;<br>using System.Text;<br>using System.Threading;<br>using System.Threading.Tasks;<br>using System.Windows.Forms;</p>
-<p>namespace Winform_Chat<br>{<br>public partial class Main_Form : Form<br>{<br>public Main_Form()<br>{<br>InitializeComponent();<br>Control.CheckForIllegalCrossThreadCalls = false;<br>}<br>// 创建一个TCP客户端套接字<br>Socket Socket_TCP = null;<br>// 创建一个接收<br>Thread thread_TCP_Read = null;<br>private void button_Connection_Click(object sender, EventArgs e)<br>{<br>if (button_Connection.Text == “连接”)<br>{<br>// 定义一个套接字用于监听客户端发来的消息，包含三个参数（ipv4寻址协议，流式连接，tcp协议）<br>Socket_TCP = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);<br>IPEndPoint iPEndPoint = new IPEndPoint(IPAddress.Parse(textBox_IP.Text), (int)numericUpDown_Port.Value);<br>try<br>{<br>Socket_TCP.Connect(iPEndPoint);<br>}<br>catch (Exception a)<br>{<br>richTextBox_Receive.AppendText(a.Message + “\r\n”);<br>return;<br>}<br>timer_Heartbeat.Start();<br>button_Connection.Text = “关闭”;<br>thread_TCP_Read = new Thread(TCP_Read);<br>thread_TCP_Read.IsBackground = true;<br>thread_TCP_Read.Start();<br>}<br>else if (button_Connection.Text == “关闭”)<br>{<br>button_Connection.Text = “连接”;<br>timer_Heartbeat.Stop();<br>Socket_TCP.Close();<br>}<br>}<br>private void button_Send_Click(object sender, EventArgs e)<br>{<br>string str_data = “aa01” + label3.Text + textBox_Send.Text.Trim() + “AA”;<br>Socket_TCP.Send(Encoding.UTF8.GetBytes(str_data));<br>richTextBox_Receive.AppendText(“本机:” + textBox_Send.Text.Trim() + “\r\n”);<br>textBox_Send.Clear();<br>}<br>private void TCP_Read()<br>{<br>while (true)<br>{<br>try<br>{<br>byte[] buffer_Data = new byte[1024 * 1024];<br>int Accept_length = Socket_TCP.Receive(buffer_Data);<br>if (Accept_length &gt; 0)<br>{<br>string Str_Data = Encoding.UTF8.GetString(buffer_Data, 0, buffer_Data.Length).Trim(“\0”.ToCharArray());<br>if (Str_Data.IndexOf(“:”) &gt; 0)<br>{<br>listBox_Friends.Items.Clear();<br>string[] strData = Str_Data.Split(‘ ‘);<br>for (int i = 0; i &lt; strData.Length - 1; i++)<br>{<br>listBox_Friends.Items.Add(strData[i]);<br>}<br>}<br>else<br>{<br>richTextBox_Receive.AppendText(“服务器:” + label3.Text + Str_Data + “\r\n”);<br>}<br>}<br>}<br>catch (Exception e)<br>{<br>richTextBox_Receive.AppendText(e.Message + “\r\n”);<br>return;<br>}<br>}<br>}</p>
-<p>private void timer_Heartbeat_Tick(object sender, EventArgs e)<br>{<br>try<br>{<br>string str_IP = “aa00aaAA”;<br>Socket_TCP.Send(Encoding.UTF8.GetBytes(str_IP));<br>}<br>catch (Exception)<br>{<br>richTextBox_Receive.AppendText(“服务器已关闭\r\n”);<br>button_Connection.Text = “连接”;<br>timer_Heartbeat.Stop();<br>Socket_TCP.Close();<br>}</p>
-<p>}</p>
-<p>private void listBox_Friends_SelectedIndexChanged(object sender, EventArgs e)<br>{<br>label3.Text = listBox_Friends.SelectedItem.ToString();<br>}<br>}<br>}</p>
-<p><img data-sizes="auto" data-src="https://img2020.cnblogs.com/blog/1595793/202007/1595793-20200717205222846-1410410144.png" alt="服务器端" class="lazyload"></p>
-<p><img data-sizes="auto" data-src="https://img2020.cnblogs.com/blog/1595793/202007/1595793-20200717205241985-521587946.png" alt="客户端" class="lazyload"></p>
-<p>链接：<a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1XJ6ilnd9f_syx6NZfQiJZQ">https://pan.baidu.com/s/1XJ6ilnd9f_syx6NZfQiJZQ</a><br>提取码：m4rd</p>
-
             
         </article>
     </div>
@@ -261,7 +200,7 @@
     <script src="https://cdn.jsdelivr.net/gh/xtaodada/xtaodada.github.io@0.0.2/copy.js"></script>
 
 
-<script src="/js/app.js?v=1597809712555"></script>
+<script src="/js/app.js?v=1597817318222"></script>
   
 
 

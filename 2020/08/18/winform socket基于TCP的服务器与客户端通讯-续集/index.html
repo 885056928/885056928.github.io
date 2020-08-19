@@ -12,17 +12,17 @@
   
 
   <link rel="shortcut icon" href="/favicon.ico" type="image/png" />
-  <meta name="description" content="在前一篇的基础上,我又增加了一点东西在里面,因为是局域网聊天交互软件 所以不可能只和服务器交互 在这个时候我理解了一个词,叫长连接和短连接长连接的意思就是说声明一个事件然后打开操作…然后关闭 这就为一个长连接,长连接只有最开始的时候打开结束的时候关闭,中间想发什么数据就发什么 想接收什么数据就接收, 短连接的意思就是每次收或者发都要打开关闭 例如发送 的时候 需要打开发送关闭 打开 接收关闭  长">
+  <meta name="description" content="在前一篇的基础上,我又增加了一点东西在里面,因为是局域网聊天交互软件 所以不可能只和服务器交互">
 <meta property="og:type" content="article">
 <meta property="og:title" content="winform socket基于TCP的服务器与客户端通讯-续集">
 <meta property="og:url" content="http://yoursite.com/2020/08/18/winform%20socket%E5%9F%BA%E4%BA%8ETCP%E7%9A%84%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%AE%A2%E6%88%B7%E7%AB%AF%E9%80%9A%E8%AE%AF-%E7%BB%AD%E9%9B%86/index.html">
 <meta property="og:site_name" content="葬歌倾城">
-<meta property="og:description" content="在前一篇的基础上,我又增加了一点东西在里面,因为是局域网聊天交互软件 所以不可能只和服务器交互 在这个时候我理解了一个词,叫长连接和短连接长连接的意思就是说声明一个事件然后打开操作…然后关闭 这就为一个长连接,长连接只有最开始的时候打开结束的时候关闭,中间想发什么数据就发什么 想接收什么数据就接收, 短连接的意思就是每次收或者发都要打开关闭 例如发送 的时候 需要打开发送关闭 打开 接收关闭  长">
+<meta property="og:description" content="在前一篇的基础上,我又增加了一点东西在里面,因为是局域网聊天交互软件 所以不可能只和服务器交互">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://img2020.cnblogs.com/blog/1595793/202007/1595793-20200717205222846-1410410144.png">
 <meta property="og:image" content="https://img2020.cnblogs.com/blog/1595793/202007/1595793-20200717205241985-521587946.png">
 <meta property="article:published_time" content="2020-08-18T05:56:41.979Z">
-<meta property="article:modified_time" content="2020-08-19T03:55:33.748Z">
+<meta property="article:modified_time" content="2020-08-19T06:08:25.210Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://img2020.cnblogs.com/blog/1595793/202007/1595793-20200717205222846-1410410144.png">
@@ -30,7 +30,7 @@
   
     <link rel="stylesheet" href="//at.alicdn.com/t/font_2013763_gtq49u46q4m.css">
   
-  <link rel="stylesheet" href="/css/style.css?v=1597809712550">
+  <link rel="stylesheet" href="/css/style.css?v=1597817318210">
 <meta name="generator" content="Hexo 5.0.2"></head>
 
 <body class="mdui-drawer-body-left">
@@ -176,6 +176,8 @@
 
   <article>
     <p>在前一篇的基础上,我又增加了一点东西在里面,因为是局域网聊天交互软件 所以不可能只和服务器交互</p>
+<a id="more"></a>
+
 <p>在这个时候我理解了一个词,叫长连接和短连接<br>长连接的意思就是说声明一个事件然后打开操作…然后关闭 这就为一个长连接,长连接只有最开始的时候打开结束的时候关闭,中间想发什么数据就发什么 想接收什么数据就接收,</p>
 <p>短连接的意思就是每次收或者发都要打开关闭 例如发送 的时候 需要打开发送关闭 打开 接收关闭 </p>
 <p>长连接和短连接都是分情况使用的</p>
@@ -251,7 +253,7 @@
     <script src="https://cdn.jsdelivr.net/gh/xtaodada/xtaodada.github.io@0.0.2/copy.js"></script>
 
 
-<script src="/js/app.js?v=1597809712551"></script>
+<script src="/js/app.js?v=1597817318211"></script>
   
 
 
